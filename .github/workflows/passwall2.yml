@@ -13,7 +13,7 @@ on:
       package_version:
         description: '这里是包版本'
         required: false
-        default: 'packages-22.03.7'
+        default: 'packages-24.10'
 
 jobs:
   build:
@@ -32,7 +32,7 @@ jobs:
           mkdir -p x86_64/depends
           package_version="${{ github.event.inputs.package_version }}"
           if [ -z "$package_version" ]; then
-            package_version="packages-22.03.7"
+            package_version="packages-24.10"
           fi
           echo "PACKAGE_VERSION=$package_version" >> $GITHUB_ENV
          
