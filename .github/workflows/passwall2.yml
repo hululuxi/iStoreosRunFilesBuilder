@@ -145,7 +145,7 @@ jobs:
         run: |
             mv -f x86_64 makeself
             cd makeself
-            ipk_file=$(ls x86_64/*.ipk)
+            ipk_file=$(ls x86_64/*_luci-app-passwall2*.ipk)
             appversion=$(basename "$ipk_file" | grep -oP '\d+\.\d+\.\d+')
             echo "APP_VERSION=$appversion" >> $GITHUB_ENV
             release_name=$(TZ="Asia/Shanghai" date +'%Y-%m-%d %H:%M Build')
