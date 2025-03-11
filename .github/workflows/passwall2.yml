@@ -36,42 +36,51 @@ jobs:
           fi
           echo "PACKAGE_VERSION=$package_version" >> $GITHUB_ENV
          
+      - name: Download latest ipk files for x86_64
+        uses: robinraju/release-downloader@v1.10
+        with:
+           # 下载源
+          repository: 'xiaorouji/openwrt-passwall2'
+          latest: true
+		       # 下载所有资源文件
+          fileName: '*'
+          out-file-path: 'x86_64/depends/'
 
-      - name: Download ipk files for x86_64
-        run: |
-          echo "Get PACKAGE_VERSION=$PACKAGE_VERSION"
+      # - name: Download ipk files for x86_64
+        # run: |
+          # echo "Get PACKAGE_VERSION=$PACKAGE_VERSION"
           
-          FILE_PREFIXES=("luci-app-passwall2" "geoview" "hysteria" "naiveproxy" "shadowsocks-rust-sslocal" "shadowsocks-rust-ssserver" "shadowsocksr-libev-ssr-local" "shadowsocksr-libev-ssr-redir" "shadowsocksr-libev-ssr-server" "simple-obfs" "sing-box" "tcping" "tuic-client" "v2ray-geoip" "v2ray-geosite" "v2ray-plugin" "xray-core")
-          EXCLUDE_PREFIXES=("luci-app-naiveproxy" "simple-obfs-client" "simple-obfs-server")
+          # FILE_PREFIXES=("luci-app-passwall2" "geoview" "hysteria" "naiveproxy" "shadowsocks-rust-sslocal" "shadowsocks-rust-ssserver" "shadowsocksr-libev-ssr-local" "shadowsocksr-libev-ssr-redir" "shadowsocksr-libev-ssr-server" "simple-obfs" "sing-box" "tcping" "tuic-client" "v2ray-geoip" "v2ray-geosite" "v2ray-plugin" "xray-core")
+          # EXCLUDE_PREFIXES=("luci-app-naiveproxy" "simple-obfs-client" "simple-obfs-server")
           
-          BASE_URL_X86="https://dl.openwrt.ai/$PACKAGE_VERSION/x86_64/kiddin9/"
-          echo "Fetching x86 directory page from $BASE_URL_X86"
-          wget -qO- "$BASE_URL_X86" | \
-          while IFS= read -r LINE; do
-              for PREFIX in "${FILE_PREFIXES[@]}"; do
-                  if [[ "$LINE" == *"$PREFIX"* ]]; then
-                      FILE=$(echo "$LINE" | grep -oP 'href="\K[^"]*')
-                      if [[ -z "$FILE" ]]; then
+          # BASE_URL_X86="https://dl.openwrt.ai/$PACKAGE_VERSION/x86_64/kiddin9/"
+          # echo "Fetching x86 directory page from $BASE_URL_X86"
+          # wget -qO- "$BASE_URL_X86" | \
+          # while IFS= read -r LINE; do
+              # for PREFIX in "${FILE_PREFIXES[@]}"; do
+                  # if [[ "$LINE" == *"$PREFIX"* ]]; then
+                      # FILE=$(echo "$LINE" | grep -oP 'href="\K[^"]*')
+                      # if [[ -z "$FILE" ]]; then
                           # echo "No file found in line, skipping"
-                          continue
-                      fi
-                      exclude_file=false
-                      for exclude_prefix in "${EXCLUDE_PREFIXES[@]}"; do
-                          if [[ "$FILE" == $exclude_prefix* ]]; then
-                              exclude_file=true
-                              break
-                          fi
-                      done
-                      if $exclude_file; then
-                          echo "Skip file: $FILE"
-                          continue
-                      fi
-                      FILE_URL="${BASE_URL_X86}${FILE}"
-                      echo "Found file: $FILE_URL"
-                      curl -L --fail "$FILE_URL" -o "x86_64/depends/$(basename $FILE_URL)" -#
-                    fi
-              done
-          done
+                          # continue
+                      # fi
+                      # exclude_file=false
+                      # for exclude_prefix in "${EXCLUDE_PREFIXES[@]}"; do
+                          # if [[ "$FILE" == $exclude_prefix* ]]; then
+                              # exclude_file=true
+                              # break
+                          # fi
+                      # done
+                      # if $exclude_file; then
+                          # echo "Skip file: $FILE"
+                          # continue
+                      # fi
+                      # FILE_URL="${BASE_URL_X86}${FILE}"
+                      # echo "Found file: $FILE_URL"
+                      # curl -L --fail "$FILE_URL" -o "x86_64/depends/$(basename $FILE_URL)" -#
+                    # fi
+              # done
+          # done
         
       - name: mv pw2 to main dir
         run: |
