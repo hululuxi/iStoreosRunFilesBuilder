@@ -37,7 +37,7 @@ jobs:
           echo "PACKAGE_VERSION=$package_version" >> $GITHUB_ENV
          
       - name: Download latest ipk files for x86_64
-        uses: robinraju/release-downloader@v1.10
+        uses: robinraju/release-downloader@v1.12
         with:
       # 下载源
           repository: 'xiaorouji/openwrt-passwall2'
