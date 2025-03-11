@@ -48,7 +48,6 @@ jobs:
 
       - name: Unzip file
         run: |
-          mkdir x86_64/depends/
           unzip source/passwall_packages_ipk_x86_64.zip -d x86_64/depends/
 
       # - name: Download ipk files for x86_64
