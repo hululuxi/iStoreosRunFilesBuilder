@@ -1,5 +1,5 @@
 pw2_ver=`ls |grep luci-app|awk -F'[_]' '{print $2}'`
-pw2zh_ver=`ls |grep luci-i18n|awk -F'[_-]' '{print $7"-"$8}'`
+pw2zh_ver=`ls |grep luci-i18n|awk -F'[_-]' '{print $6}'`
 opkg update
 if [ $? -ne 0 ]; then
     echo "更新软件源列表错误，请检查路由器自身网络连接以及是否有失效的软件源。"
