@@ -88,8 +88,8 @@ jobs:
         
       - name: mv pw2 to main dir
         run: |
-          pw2_ver=`ls |grep luci-app|awk -F'[_]' '{print $2}'`
-          pw2zh_ver=`ls |grep luci-i18n|awk -F'[_-]' '{print $7"-"$8}'`
+          pw2_ver=`ls |grep luci-app|awk -F'[_]' '{print $3}'`
+          pw2zh_ver=`ls |grep luci-i18n|awk -F'[_-]' '{print $8}'`
           mv source/*_luci-app-passwall2*.ipk x86_64/luci-app-passwall2_"$pw2_ver"_all.ipk
           mv source/*_luci-i18n-passwall2-zh-cn*_all.ipk x86_64/luci-i18n-passwall2-zh-cn_"$pw2zh_ver"_all.ipk
           echo "List main dir ipk files for x86"
