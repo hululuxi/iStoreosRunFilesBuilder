@@ -88,7 +88,6 @@ jobs:
         
       - name: mv pw2 to main dir
         run: |
-          cd source
           pw2_ver=`ls source |grep luci-app|awk -F'[_]' '{print $3}'`
           echo "pw2_ver=$pw2_ver"
           pw2zh_ver=`ls source |grep luci-i18n|awk -F'[_-]' '{print $8}'`
