@@ -147,6 +147,7 @@ jobs:
   
       - name: Create self-extracting archives
         run: |
+          pw2_ver=`ls source |grep luci-app|awk -F'[_]' '{print $3}'`
           mv -f x86_64 makeself
           cd makeself
           ipk_file=$(ls x86_64/luci-app-passwall2*.ipk)
