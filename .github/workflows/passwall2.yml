@@ -44,11 +44,12 @@ jobs:
           latest: true
       # 下载所有资源文件
           fileName: '*'
-          out-file-path: 'x86_64/depends/'
+          out-file-path: 'source/'
 
-      # - name: Unzip file
-        # run: unzip x86_64/depends/*.zip
-
+      - name: Unzip file
+        run: |
+          mkdir x86_64/depends/
+          unzip source/passwall_packages_ipk_x86_64.zip -d x86_64/depends/
 
       # - name: Download ipk files for x86_64
         # run: |
@@ -88,7 +89,8 @@ jobs:
         
       - name: mv pw2 to main dir
         run: |
-          mv x86_64/depends/luci-app-passwall2*.ipk x86_64
+          mv source/*_luci-app-passwall2*.ipk x86_64
+          mv source/*_luci-i18n-passwall2-zh-cn*_all.ipk x86_64
           echo "List main dir ipk files for x86"
           ls x86_64
       
