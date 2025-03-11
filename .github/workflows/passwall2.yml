@@ -39,10 +39,10 @@ jobs:
       - name: Download latest ipk files for x86_64
         uses: robinraju/release-downloader@v1.10
         with:
-           # 下载源
+      # 下载源
           repository: 'xiaorouji/openwrt-passwall2'
           latest: true
-		       # 下载所有资源文件
+      # 下载所有资源文件
           fileName: '*'
           out-file-path: 'x86_64/depends/'
 
