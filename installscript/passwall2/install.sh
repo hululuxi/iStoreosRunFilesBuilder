@@ -10,8 +10,8 @@ opkg install haproxy shadowsocks-libev-config shadowsocks-libev-ss-local shadows
 if opkg list-installed | grep -q 'luci-app-passwall2.*'$pw2_ver''; then
   echo "发现相同版本，正在执行强制重新安装passwall2 "$pw2_ver""
   opkg install luci-app-passwall2_"$pw2_ver"_all.ipk --force-reinstall
-  opkg install luci-i18n-passwall2-zh-cn_git-"pw2zh_ver"_all.ipk
+  opkg install luci-i18n-passwall2-zh-cn_"$pw2zh_ver"_all.ipk
 else
   echo "正在安装passwall2 "$pw2_ver""
-  opkg install luci-app-passwall2_"$pw2_ver"_all.ipk luci-i18n-passwall2-zh-cn_git-"$pw2zh_ver"_all.ipk
+  opkg install luci-app-passwall2_"$pw2_ver"_all.ipk luci-i18n-passwall2-zh-cn_"$pw2zh_ver"_all.ipk
 fi
