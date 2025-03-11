@@ -46,6 +46,10 @@ jobs:
           fileName: '*'
           out-file-path: 'x86_64/depends/'
 
+      # - name: Unzip file
+        # run: unzip x86_64/depends/*.zip
+
+
       # - name: Download ipk files for x86_64
         # run: |
           # echo "Get PACKAGE_VERSION=$PACKAGE_VERSION"
