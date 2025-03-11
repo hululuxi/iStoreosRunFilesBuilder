@@ -88,48 +88,50 @@ jobs:
         
       - name: mv pw2 to main dir
         run: |
-          mv source/*_luci-app-passwall2*.ipk x86_64
-          mv source/*_luci-i18n-passwall2-zh-cn*_all.ipk x86_64
+          pw2_ver=`ls |grep *_luci-app|awk -F'[_]' '{print $2}'`
+          pw2zh_ver=`ls |grep *_luci-i18n|awk -F'[_-]' '{print $7"-"$8}'`
+          mv source/*_luci-app-passwall2*.ipk x86_64/luci-app-passwall2_"$pw2_ver"_all.ipk
+          mv source/*_luci-i18n-passwall2-zh-cn*_all.ipk x86_64/luci-i18n-passwall2-zh-cn_"$pw2zh_ver"_all.ipk
           echo "List main dir ipk files for x86"
           ls x86_64
       
-      - name: downloads libopenssl3 & libudns ipk
-        run: |
-          echo "downloading libopenssl3 ipk"
-          FILE_PREFIXES=("libopenssl3" "libudns")
-          BASE_URL_X86="https://dl.openwrt.ai/$PACKAGE_VERSION/x86_64/base/"
-          wget -qO- "$BASE_URL_X86" | \
-          while IFS= read -r LINE; do
-            for PREFIX in "${FILE_PREFIXES[@]}"; do
-                if [[ "$LINE" == *"$PREFIX"* ]]; then
-                    FILE=$(echo "$LINE" | grep -oP 'href="\K[^"]*')
-                    if [[ -z "$FILE" ]]; then
-                        # echo "No file found in line, skipping"
-                        continue
-                    fi
-                    FILE_URL="${BASE_URL_X86}${FILE}"
-                    echo "Found file: $FILE_URL"
-                    curl -L --fail "$FILE_URL" -o "x86_64/depends/$(basename $FILE_URL)" -#
-                  fi
-            done
-          done
-          echo "downloading libudns ipk"
-          BASE_URL_X86="https://dl.openwrt.ai/$PACKAGE_VERSION/x86_64/packages/"
-          wget -qO- "$BASE_URL_X86" | \
-          while IFS= read -r LINE; do
-            for PREFIX in "${FILE_PREFIXES[@]}"; do
-                if [[ "$LINE" == *"$PREFIX"* ]]; then
-                    FILE=$(echo "$LINE" | grep -oP 'href="\K[^"]*')
-                    if [[ -z "$FILE" ]]; then
-                        # echo "No file found in line, skipping"
-                        continue
-                    fi
-                    FILE_URL="${BASE_URL_X86}${FILE}"
-                      echo "Found file: $FILE_URL"
-                      curl -L --fail "$FILE_URL" -o "x86_64/depends/$(basename $FILE_URL)" -#
-                fi
-            done
-          done          
+      # - name: downloads libopenssl3 & libudns ipk
+        # run: |
+          # echo "downloading libopenssl3 ipk"
+         # FILE_PREFIXES=("libopenssl3" "libudns")
+          # BASE_URL_X86="https://dl.openwrt.ai/$PACKAGE_VERSION/x86_64/base/"
+          # wget -qO- "$BASE_URL_X86" | \
+          # while IFS= read -r LINE; do
+            # for PREFIX in "${FILE_PREFIXES[@]}"; do
+                # if [[ "$LINE" == *"$PREFIX"* ]]; then
+                    # FILE=$(echo "$LINE" | grep -oP 'href="\K[^"]*')
+                    # if [[ -z "$FILE" ]]; then
+                        # # echo "No file found in line, skipping"
+                        # continue
+                    # fi
+                    # FILE_URL="${BASE_URL_X86}${FILE}"
+                    # echo "Found file: $FILE_URL"
+                    # curl -L --fail "$FILE_URL" -o "x86_64/depends/$(basename $FILE_URL)" -#
+                  # fi
+            # done
+          # done
+          # echo "downloading libudns ipk"
+          # BASE_URL_X86="https://dl.openwrt.ai/$PACKAGE_VERSION/x86_64/packages/"
+          # wget -qO- "$BASE_URL_X86" | \
+          # while IFS= read -r LINE; do
+            # for PREFIX in "${FILE_PREFIXES[@]}"; do
+                # if [[ "$LINE" == *"$PREFIX"* ]]; then
+                    # FILE=$(echo "$LINE" | grep -oP 'href="\K[^"]*')
+                    # if [[ -z "$FILE" ]]; then
+                        # # echo "No file found in line, skipping"
+                        # continue
+                    # fi
+                    # FILE_URL="${BASE_URL_X86}${FILE}"
+                      # echo "Found file: $FILE_URL"
+                      # curl -L --fail "$FILE_URL" -o "x86_64/depends/$(basename $FILE_URL)" -#
+                # fi
+            # done
+          # done          
 
       - name: List depends ipks
         run: |
@@ -138,19 +140,20 @@ jobs:
       
       - name: Create install.sh 
         run: |
-            echo -e "#!/bin/sh\n\nopkg update\nif [ \$? -ne 0 ]; then\n    echo \"update failed\"\n    exit 1\nfi\nopkg install depends/*.ipk --force-depends\nopkg install *.ipk --force-depends" > x86_64/install.sh
+            # echo -e "#!/bin/sh\n\nopkg update\nif [ \$? -ne 0 ]; then\n    echo \"update failed\"\n    exit 1\nfi\nopkg install depends/*.ipk --force-depends\nopkg install *.ipk --force-depends" > x86_64/install.sh
+            cp installscript/passwall2/install.sh x86_64/install.sh
             chmod +x x86_64/install.sh
   
       - name: Create self-extracting archives
         run: |
-            mv -f x86_64 makeself
-            cd makeself
-            ipk_file=$(ls x86_64/*_luci-app-passwall2*.ipk)
-            appversion=$(basename "$ipk_file" | grep -oP '\d+\.\d+\.\d+')
-            echo "APP_VERSION=$appversion" >> $GITHUB_ENV
-            release_name=$(TZ="Asia/Shanghai" date +'%Y-%m-%d %H:%M Build')
-            echo "RELEASE_NAME=$release_name" >> $GITHUB_ENV
-            ./makeself.sh x86_64/ passwall2_x86_64_$appversion.run "by github action" ./install.sh           
+          mv -f x86_64 makeself
+          cd makeself
+          ipk_file=$(ls x86_64/*_luci-app-passwall2*.ipk)
+          appversion=$(basename "$ipk_file" | grep -oP '\d+\.\d+\.\d+')
+          echo "APP_VERSION=$appversion" >> $GITHUB_ENV
+          release_name=$(TZ="Asia/Shanghai" date +'%Y-%m-%d %H:%M Build')
+          echo "RELEASE_NAME=$release_name" >> $GITHUB_ENV
+          ./makeself.sh x86_64/ passwall2_x86_64_$appversion.run "by github action" ./install.sh           
       
       - name: Upload all .run files to GitHub Release
         uses: softprops/action-gh-release@v2.1.0
