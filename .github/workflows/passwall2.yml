@@ -40,7 +40,7 @@ jobs:
         uses: robinraju/release-downloader@v1.12
         with:
       # 下载源
-          repository: 'xiaorouji/openwrt-passwall2'
+          repository: 'Openwrt-Passwall/openwrt-passwall2'
           latest: true
       # 下载所有资源文件
           fileName: '*'
