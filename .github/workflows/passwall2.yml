@@ -49,16 +49,15 @@ jobs:
       - name: Create install.sh scripts
         run: |
           cat <<EOF > passwall_x86_64/install.sh
-          #!/bin/sh
+          !/bin/sh
+          pw2_ver=`ls |grep luci-app|awk -F'[_]' '{print $2}'`
+          pw2zh_ver=`ls |grep luci-i18n|awk -F'[_-]' '{print $6}'`
           opkg update
           if [ $? -ne 0 ]; then
-              echo "update failed。"
-              exit 1
+            echo "更新软件源列表错误，请检查路由器自身网络连接以及是否有失效的软件源。"
+            exit 1
           fi
-          opkg install iptables-mod-tproxy
-          opkg install iptables-mod-socket
-          opkg install iptables-mod-iprange
-          opkg install iptables-mod-conntrack-extra
+          opkg install iptables-mod-tproxy iptables-mod-socket iptables-mod-iprange iptables-mod-conntrack-extra
           opkg install depends/*.ipk
           opkg install main/*.ipk
           EOF
