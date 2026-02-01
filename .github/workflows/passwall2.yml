@@ -45,7 +45,7 @@ jobs:
           # 下载luci语言包ipk
           curl -L -O $(
             curl -s https://api.github.com/repos/Openwrt-Passwall/openwrt-passwall2/releases/latest \
-            | jq -r '.assets[] | select(.name | test("luci-.*-passwall2.*\\.ipk")) | .browser_download_url' | tail -1
+            | jq -r '.assets[] | select(.name | test("luci-i18n-passwall2-zh-cn.*\\.ipk")) | .browser_download_url' | tail -1
           )
       
       - name: Organize files for x86_64
